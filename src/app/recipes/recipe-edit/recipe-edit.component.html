@@ -1,0 +1,72 @@
+
+<form [formGroup]="form">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="form-group">
+                <button class="btn btn-success" [disabled]="!form.valid" (click)="onSubmit()"> {{editMode ? 'Modificar' : 'Agregar'}}</button>
+                <button class="btn btn-primary" (click)="cerrarForm()"> Cancelar </button>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="form-group">
+                <label for="titulo">Nombre</label>
+                <input type="text" id="nombre" class="form-control"  name="nombre" formControlName="nombre" #nombre >
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="form-group">
+                <label for="img">Imagen</label>
+                <input type="text" id="imagen" class="form-control" formControlName="imagen" #img>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="form-group">
+                <img [src]="img.value" [alt]="nombre.value" class="img-responsive">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="form-group">
+                <label for="descripcion">Descripcion</label>
+                <textarea id="descripcion" class="form-control" formControlName="descripcion" rows="6" >
+                </textarea>
+            </div>
+        </div>
+    </div>  
+    <div class="row">
+        <div class="col-xs-12" formArrayName="ingredientes">
+            <h4>Ingredientes</h4>
+            <div class="row" 
+                *ngFor="let ingredientCtrl of controls; let i = index"
+                [formGroupName]="i"
+                Style="margin-top:10px"
+                >
+                <div class="col-xs-8">
+                    <input type="text" class="form-control" formControlName="nombre">
+                </div>
+                <div class="col-xs-2">
+                    <input type="number" class="form-control" formControlName="valor">
+                </div>
+                <div class="col xs-2">
+                    <button type="button" class="btn btn-danger" (click)="borrarIng(i)"> X </button>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-xs-2">
+            <button class="btn btn-primary" (click)="onagregarIngrediente()"> Agregar Ingrediente </button>
+        </div>
+    </div>
+</form>
