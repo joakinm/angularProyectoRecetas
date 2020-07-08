@@ -5,11 +5,7 @@ import { Ingredientes} from '../../shared/ingredients.model';
 export class ingredientesServices{
   ingredienteEditado = new Subject<Ingredientes[]>();
   ingredienteEdicion = new Subject<number>();
-private ingredientes: Ingredientes[] = [
-    new Ingredientes('tomates', 10),
-    new Ingredientes('lechuga',5),
-    new Ingredientes('papa',4)
-  ];
+private ingredientes: Ingredientes[] = [];
 
   constructor() { }
 

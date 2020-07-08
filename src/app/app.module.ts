@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import {  HttpClientModule } from '@angular/common/http';
+import {  HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'; 
 
 import { AppComponent } from './app.component';
@@ -21,6 +21,7 @@ import { DropdownDirective } from './shared/dropdown.directive';
 import { AppRoutingModule } from './app-routing.module';
 import { ingredientesServices } from './shopping/shopping-edit/ingredientes.services';
 import { recipeServices } from './recipes/recipes.services';
+import { authInterceptorService } from './auth/auth-interceptor.service';
 
 
 @NgModule({
@@ -46,7 +47,10 @@ import { recipeServices } from './recipes/recipes.services';
     AppRoutingModule,
     HttpClientModule
   ],
-  providers: [ingredientesServices, recipeServices],
+  providers: [ingredientesServices, recipeServices,{
+    provide: HTTP_INTERCEPTORS, 
+    useClass: authInterceptorService, multi:true
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { authService } from './auth.service';
+import { authService, RespuestaAuth } from './auth.service';
+import { Observable } from 'rxjs';
+import { RouterLink, Router } from '@angular/router';
 
 @Component({
   selector: 'app-auth',
@@ -11,35 +13,38 @@ export class AuthComponent implements OnInit {
   modoLogin = true;
   isLogin = false;
   error:string = null;
-
-  constructor(private authserv : authService) { }
-
+  
+  
+  constructor(private authserv : authService, private router : Router) { }
+  
   ngOnInit(): void {
-
+    
   }
   onCambiarModo(){
     this.modoLogin = !this.modoLogin;
   }
-
+  
+  
   onSubmitForm(form : NgForm){
+    const mail = form.value.mail;
+    const pass = form.value.password;
     if (!form.valid){
       return
     }
+    let auth : Observable<RespuestaAuth>
+    this.isLogin = true;
     if(this.modoLogin){
-
+      auth = this.authserv.login(mail,pass)
     }else{
-      const mail = form.value.mail;
-      const pass = form.value.password;
-      this.isLogin = true;
-      this.authserv.login(mail,pass)
-      .subscribe(resData => {
-        this.isLogin = false;
-      },err=>{
-        this.error = err;
-        this.isLogin = false;
-      }
-    );
+      auth = this.authserv.registro(mail,pass)
     }
+    auth.subscribe(resData => {
+      this.isLogin = false;
+      this.router.navigate(['/recipes']);
+    },err=>{
+      this.error = err;
+      this.isLogin = false;
+    });
     form.reset();
   }
 }

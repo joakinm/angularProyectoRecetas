@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { recipeServices } from '../recipes/recipes.services';
 import {ingredientesServices} from '../shopping/shopping-edit/ingredientes.services';
 import { Recipe } from '../recipes/recipe.model';
-import { Ingredientes } from './ingredients.model';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import { throwError, Subject, } from 'rxjs';
-import { map, tap, catchError } from 'rxjs/operators';
+import { map, tap, catchError, take, exhaustMap } from 'rxjs/operators';
+import { authService } from '../auth/auth.service';
 
 @Injectable ({providedIn: 'root'})
 
@@ -13,7 +13,7 @@ export class dataServices {
     rec: Recipe[];
     error = new Subject<string>();
     constructor(private recServ:recipeServices , private ingServ : ingredientesServices,
-                private http: HttpClient){}
+                private http: HttpClient, private authServ : authService){}
                 
     guardarRecetas(){
         this.rec = this.recServ.getRecetas();
@@ -38,33 +38,6 @@ export class dataServices {
         })
         );
     }
-
-    // guardarIngredientes(){
-    //     this.ing = this.ingServ.getIngredientes();
-    //     this.http.put(
-    //         'https://recetasproyecto-104e7.firebaseio.com/ingredients.json',
-    //         this.ing
-    //         )
-    //         .subscribe(responseData => {
-    //             console.log(responseData);
-    //         }, err=>{this.error.next(err.message); } //haciendo un subscribe del error y copiando el mensaje del error
-    //         );
-    //     }
-
-    // guardarDatos(){
-    //     this.rec = this.recServ.getRecetas();
-    //     this.ing = this.ingServ.getIngredientes();
-    //     let postData = {'recetas':this.rec, 'ingredientes':this.ing};
-    //     this.http
-    //         .post<{name : string}>(
-    //         'https://recetasproyecto-104e7.firebaseio.com/',
-    //         postData
-    //         )
-    //         .subscribe(responseData => {
-    //         console.log(responseData);
-    //         }, err=>{this.error.next(err.message); } //haciendo un subscribe del error y copiando el mensaje del error
-    //         );
-    // }
 
     getDatos(){
         
