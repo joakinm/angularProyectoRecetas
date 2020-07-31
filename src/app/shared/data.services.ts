@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { recipeServices } from '../recipes/recipes.services';
 import {ingredientesServices} from '../shopping/shopping-edit/ingredientes.services';
 import { Recipe } from '../recipes/recipe.model';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import { throwError, Subject, } from 'rxjs';
 import { map, tap, catchError, take, exhaustMap } from 'rxjs/operators';
 import { authService } from '../auth/auth.service';
@@ -46,7 +46,7 @@ export class dataServices {
             const arr = [];
             for(const key in responseData){
             if(responseData.hasOwnProperty(key)){
-                console.log(responseData); arr.push({...responseData[key],id: key});
+                arr.push({...responseData[key],id: key});
             }
             }
             return arr;

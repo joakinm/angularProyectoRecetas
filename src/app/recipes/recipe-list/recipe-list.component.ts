@@ -1,7 +1,7 @@
 import { Component, OnInit} from '@angular/core';
 import { Recipe } from '../recipe.model'
 import {recipeServices } from '../recipes.services';
-import { Router, RouterLinkActive, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-recipe-list',
   templateUrl: './recipe-list.component.html',

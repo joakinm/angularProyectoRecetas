@@ -10,7 +10,6 @@ import { recipeServices } from '../recipes.services';
   styleUrls: ['./recipe-edit.component.scss']
 })
 export class RecipeEditComponent implements OnInit {
-  // @ViewChild('f',{static:false}) singupform: NgForm;
   titulo: string;
   descripcion: string;
   foto: string;

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { recipeServices } from './recipes.services';
+import { dataServices } from '../shared/data.services';
 
 @Component({
   selector: 'app-recipes',
@@ -7,10 +8,13 @@ import { recipeServices } from './recipes.services';
   styleUrls: ['./recipes.component.scss']
 })
 export class RecipesComponent implements OnInit {
-  constructor() { }
+  constructor(private data: dataServices) {}
 
 
   ngOnInit() {
-  }
 
+  }
+  onGetData(){
+    this.data.getDatos();
+  }
 }
