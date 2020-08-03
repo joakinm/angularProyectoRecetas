@@ -22,6 +22,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { ingredientesServices } from './shopping/shopping-edit/ingredientes.services';
 import { recipeServices } from './recipes/recipes.services';
 import { authInterceptorService } from './auth/auth-interceptor.service';
+import { AlertComponent } from './shared/alert/alert.component';
+import { placeHolderDirective } from './shared/placeholder/placeholder.directive';
 
 
 @NgModule({
@@ -38,7 +40,9 @@ import { authInterceptorService } from './auth/auth-interceptor.service';
     RecipeEditComponent,
     RecipeStartComponent,
     AuthComponent,
-    LoadingSpinner
+    LoadingSpinner,
+    AlertComponent,
+    placeHolderDirective,
   ],
   imports: [
     BrowserModule,

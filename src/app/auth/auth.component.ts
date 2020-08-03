@@ -1,24 +1,30 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ComponentFactoryResolver, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { authService, RespuestaAuth } from './auth.service';
-import { Observable } from 'rxjs';
-import { RouterLink, Router } from '@angular/router';
+import { Observable, Subscription } from 'rxjs';
+import { Router } from '@angular/router';
+import { AlertComponent } from '../shared/alert/alert.component';
+import { placeHolderDirective } from '../shared/placeholder/placeholder.directive';
 
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.scss']
 })
-export class AuthComponent implements OnInit {
+export class AuthComponent implements OnInit, OnDestroy {
   modoLogin = true;
   isLogin = false;
   error:string = null;
-  
-  
-  constructor(private authserv : authService, private router : Router) { }
-  
+  @ViewChild (placeHolderDirective,{static: false}) alertHost: placeHolderDirective;
+  constructor(private authserv : authService, private router : Router, private cmpFactoryResolver : ComponentFactoryResolver) { }
+  private closeSubscription : Subscription;
   ngOnInit(): void {
     
+  }
+  ngOnDestroy(){
+    if(this.closeSubscription){
+      this.closeSubscription.unsubscribe();
+    }
   }
   onCambiarModo(){
     this.modoLogin = !this.modoLogin;
@@ -43,8 +49,27 @@ export class AuthComponent implements OnInit {
       this.router.navigate(['/recipes']);
     },err=>{
       this.error = err;
+      this.showErrorAlert(err);
       this.isLogin = false;
     });
     form.reset();
+  }
+  onHandleError(){
+    this.error = null;
+  }
+  private showErrorAlert(message:string){
+    const alertCmp = this.cmpFactoryResolver.resolveComponentFactory (AlertComponent);
+    //uso el factory resolver para poder crear el componente dinamicamente
+    const host = this.alertHost.viewContainerRef;
+    host.clear();
+    //creo el componente
+    const componentRef = host.createComponent(alertCmp);
+    //termino de crear el componente y paso el input y el output que tenia
+    componentRef.instance.message = message;
+    this.closeSubscription = componentRef.instance.close.subscribe(() => {
+      this.closeSubscription.unsubscribe();
+      host.clear();
+    });
+
   }
 }

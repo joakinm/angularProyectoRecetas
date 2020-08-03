@@ -1,8 +1,7 @@
+<ng-template appPlaceHolder></ng-template><!-- forma complicada de crear un componente dinamico -->
 <div class="row">
     <div class="col-xs-12 col-md-6 col-md-offset-3">
-        <div class="alert alert-danger" *ngIf="error">
-            <p>{{error}}</p>
-        </div>
+        <!-- <app-alert *ngIf="error" [message]="error" (close)="onHandleError()"></app-alert> 1 forma sencilla de crear un componente dinamico -->
         <div *ngIf="this.isLogin" id="spinner"> 
             <app-loading-spinner></app-loading-spinner>
         </div>
