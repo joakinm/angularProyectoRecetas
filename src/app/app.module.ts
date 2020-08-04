@@ -17,14 +17,13 @@ import { authInterceptorService } from './auth/auth-interceptor.service';
 import { AlertComponent } from './shared/alert/alert.component';
 import { placeHolderDirective } from './shared/placeholder/placeholder.directive';
 import { RecipesModule } from './recipes/recipes.module';
+import { ShoppingModule } from './shopping/shopping.module';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     headerComponent,
-    ShoppingComponent,
-    ShoppingEditComponent,
     DropdownDirective,
     AuthComponent,
     LoadingSpinner,
@@ -37,7 +36,8 @@ import { RecipesModule } from './recipes/recipes.module';
     ReactiveFormsModule,
     AppRoutingModule,
     HttpClientModule,
-    RecipesModule
+    RecipesModule,
+    ShoppingModule
   ],
   providers: [ingredientesServices, recipeServices,{
     provide: HTTP_INTERCEPTORS, 
