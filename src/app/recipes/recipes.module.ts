@@ -10,6 +10,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from '../app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from '../shared/shared.module';
+import { RouterModule } from '@angular/router';
+import { RecipesRoutingModule } from './recipes-routing.module';
 
 @NgModule({
     declarations:[
@@ -21,7 +23,7 @@ import { SharedModule } from '../shared/shared.module';
         RecipeStartComponent,
     ],
     imports:[ReactiveFormsModule,
-        AppRoutingModule,
+        RecipesRoutingModule,
         HttpClientModule,
         SharedModule,
     ]
