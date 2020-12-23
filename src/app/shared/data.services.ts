@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { recipeServices } from '../recipes/recipes.services';
+import { recipeServices } from '../recipes/recipes.service';
 import {ingredientesServices} from '../shopping/shopping-edit/ingredientes.services';
 import { Recipe } from '../recipes/recipe.model';
 import {HttpClient} from '@angular/common/http';

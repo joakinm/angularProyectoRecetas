@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRoute, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Recipe } from './recipe.model';
 import { dataServices } from '../shared/data.services';
-import { recipeServices } from './recipes.services';
+import { recipeServices } from './recipes.service';
 
 
 @Injectable({providedIn:'root'})

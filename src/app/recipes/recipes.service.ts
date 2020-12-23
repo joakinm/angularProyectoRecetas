@@ -3,10 +3,13 @@ import { Injectable } from "@angular/core";
 import { Ingredientes } from '../shared/ingredients.model';
 import { ingredientesServices } from '../shopping/shopping-edit/ingredientes.services';
 import { Subject } from 'rxjs';
+import { Store } from '@ngrx/store';
+import * as shoppingListAction from '../shopping/store/shopping-list.action'
 
 @Injectable ({providedIn: 'root'})
 export class recipeServices{
-constructor(private ingServ : ingredientesServices) {};
+constructor(private ingServ : ingredientesServices,
+            private store: Store<{shoppingList: {ingredientes: Ingredientes}}> ) {};
     recetasCambios = new Subject<Recipe[]>();
     private recipes: Recipe[] = [];
     //-----------------------GET-----------------------------------------
@@ -17,7 +20,7 @@ constructor(private ingServ : ingredientesServices) {};
         return this.recipes[id];
     }
     onAgregarIngCarrito(listaIng : Ingredientes[]){
-        this.ingServ.onAgregarIngredientes(listaIng);
+        this.store.dispatch(new shoppingListAction.addIngredientes(listaIng));
     }
     //-------------------AGREGAR-----------------------------------------
     agregarReceta(receta:Recipe){
