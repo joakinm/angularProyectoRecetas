@@ -1,8 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { Subscription, Observable } from 'rxjs';
 
-import { Ingredientes} from '../shared/ingredients.model';
-import{ingredientesServices} from './shopping-edit/ingredientes.services';
+import { Ingredientes } from '../shared/ingredients.model';
+import{ingredientesServices } from './shopping-edit/ingredientes.services';
+import { shoppingListType } from './store/shopping-list.action';
 
 @Component({
   selector: 'app-shopping',
@@ -10,23 +12,18 @@ import{ingredientesServices} from './shopping-edit/ingredientes.services';
   styleUrls: ['./shopping.component.scss']
 })
 
-export class ShoppingComponent implements OnInit, OnDestroy {
+export class ShoppingComponent implements OnInit {
   
-  ingredientes : Ingredientes[];
+  ingredientes : Observable <{ ingredientes: Ingredientes[] }>;
   private subsIngServ : Subscription;
   
-  constructor(private ingserv : ingredientesServices) {}
+  constructor(private ingserv : ingredientesServices, 
+              private store: Store<{shoppingList: {ingredientes: Ingredientes[]}}> 
+    ) {}
 
     
   ngOnInit(): void {
-    this.ingredientes = this.ingserv.getIngredientes();
-    this.subsIngServ = this.ingserv.ingredienteEditado.subscribe(
-      (ing:Ingredientes[]) => {this.ingredientes = ing;}
-    )
-  }
-
-  ngOnDestroy(){
-    this.subsIngServ.unsubscribe();
+    this.ingredientes = this.store.select('shoppingList');
   }
 
   onAgregarIngrediente($event){
@@ -35,7 +32,5 @@ export class ShoppingComponent implements OnInit, OnDestroy {
   onEditarIngrediente(index:number){
     this.ingserv.ingredienteEdicion.next(index);
   }
-  
-
 
 }
