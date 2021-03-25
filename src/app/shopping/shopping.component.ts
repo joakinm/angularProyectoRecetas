@@ -14,10 +14,10 @@ import { shoppingListType } from './store/shopping-list.action';
 
 export class ShoppingComponent implements OnInit {
   
-  ingredientes : Observable <{ ingredientes: Ingredientes[] }>;
-  private subsIngServ : Subscription;
+  ingredientes: Observable <{ ingredientes: Ingredientes[] }>;
+  private subsIngServ: Subscription;
   
-  constructor(private ingserv : ingredientesService, 
+  constructor(private ingserv: ingredientesService, 
               private store: Store<{shoppingList: {ingredientes: Ingredientes[]}}> 
     ) {}
 
@@ -26,10 +26,11 @@ export class ShoppingComponent implements OnInit {
     this.ingredientes = this.store.select('shoppingList');
   }
 
-  onAgregarIngrediente($event){
+  onAgregarIngrediente($event) {
   this.ingserv.onAgregarIngrediente($event);
   }
-  onEditarIngrediente(index:number){
+
+  onEditarIngrediente(index:number) {
     this.ingserv.ingredienteEdicion.next(index);
   }
 

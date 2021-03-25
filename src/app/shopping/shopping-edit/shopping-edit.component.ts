@@ -1,9 +1,11 @@
-import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { Observable, Subscription } from 'rxjs';
 
-import {Ingredientes} from '../../shared/ingredients.model';
-import { ingredientesServices } from './ingredientes.services';
+import { Ingredientes } from '../../shared/ingredients.model';
+import { ingredientesService } from './ingredientes.service';
+import * as shoppingListAction from '../store/shopping-list.action';
 
 @Component({
   selector: 'app-shopping-edit',
@@ -11,47 +13,47 @@ import { ingredientesServices } from './ingredientes.services';
   styleUrls: ['./shopping-edit.component.scss']
 })
 export class ShoppingEditComponent implements OnInit, OnDestroy {
-  subscription: Subscription;
-  ingredientes : Ingredientes[];
-  modoEdit=false;
+  ingredientes: Observable< {ingredientes: Ingredientes[]} >;
+  modoEdit = false;
   
   ing: Ingredientes;
   indexEdit:number;
   
-  constructor(private ingserv : ingredientesServices) {}
+  constructor(private ingserv : ingredientesService, private store: Store<{shoppingList: { ingredientes: Ingredientes[]} }>) {}
   @ViewChild("f") formulario:NgForm;
   
   
   ngOnInit(): void {
-    this.subscription = this.ingserv.ingredienteEdicion.subscribe(
-      (index:number) => {
-        this.indexEdit = index;
-        this.modoEdit = true;//activo el modo edicion
-        this.ing = this.ingserv.getIngrediente(index);
-        this.formulario.setValue({//envia el valor del ingrediente a los inputs
-          nombre : this.ing.nombre, 
-          valor: this.ing.valor})
-      });
+    this.ingredientes = this.store.select('shoppingList');
+    this.store.select('shoppingList').subscribe();
   }
-  ngOnDestroy(){
-    this.subscription.unsubscribe();
+
+  ngOnDestroy() {
   }
-  onAgregarDatos(f:NgForm) {
+
+  onAgregarDatos(f: NgForm) {
     const value = f.value;
-    const nuevoIng = new Ingredientes (value.nombre ,value.valor );
-    if(this.modoEdit == true)
-    {this.ingserv.EditarIngrediente(this.indexEdit,nuevoIng);}
+    const nuevoIng = new Ingredientes(value.nombre, value.valor);
+    if(this.modoEdit == true) {
+      this.store.dispatch(
+        new shoppingListAction.updateIngredients({
+          index: this.indexEdit, 
+          ingrediente: nuevoIng
+        }));
+    }
     else
-    {this.ingserv.onAgregarIngrediente(nuevoIng);}
+    {
+      this.store.dispatch(new shoppingListAction.addIngredient(nuevoIng));
+    }
   }
-  eliminarIngrediente(){
-    this.ingserv.eliminarIngrediente(this.indexEdit);
+  eliminarIngrediente() {
+    this.store.dispatch(new shoppingListAction.deleteIngredientes(this.indexEdit));
     this.formulario.reset();
   }
 
-  limpiarInputs(f:NgForm){
+  limpiarInputs(f: NgForm) {
   this.formulario.reset();
-  this.modoEdit=false;
+  this.modoEdit = false;
   }
 }
   
