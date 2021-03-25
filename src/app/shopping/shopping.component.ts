@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { Subscription, Observable } from 'rxjs';
 
 import { Ingredientes } from '../shared/ingredients.model';
-import{ingredientesServices } from './shopping-edit/ingredientes.services';
+import{ingredientesService } from './shopping-edit/ingredientes.service';
 import { shoppingListType } from './store/shopping-list.action';
 
 @Component({
@@ -17,7 +17,7 @@ export class ShoppingComponent implements OnInit {
   ingredientes : Observable <{ ingredientes: Ingredientes[] }>;
   private subsIngServ : Subscription;
   
-  constructor(private ingserv : ingredientesServices, 
+  constructor(private ingserv : ingredientesService, 
               private store: Store<{shoppingList: {ingredientes: Ingredientes[]}}> 
     ) {}
 

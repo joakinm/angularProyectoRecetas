@@ -1,14 +1,14 @@
 import { Recipe } from './recipe.model';
 import { Injectable } from "@angular/core";
 import { Ingredientes } from '../shared/ingredients.model';
-import { ingredientesServices } from '../shopping/shopping-edit/ingredientes.services';
+import { ingredientesService } from '../shopping/shopping-edit/ingredientes.service';
 import { Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as shoppingListAction from '../shopping/store/shopping-list.action'
 
 @Injectable ({providedIn: 'root'})
 export class recipeServices{
-constructor(private ingServ : ingredientesServices,
+constructor(private ingServ : ingredientesService,
             private store: Store<{shoppingList: {ingredientes: Ingredientes}}> ) {};
     recetasCambios = new Subject<Recipe[]>();
     private recipes: Recipe[] = [];

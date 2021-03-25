@@ -8,7 +8,7 @@ const appRoutes: Routes = [
   {path: '', redirectTo: '/recipes', pathMatch:'full'},
   {path:'recipes', loadChildren:() => import('./recipes/recipes.module').then(m=> m.RecipesModule)}, //lazy loading RecipesModule
   {path: 'shopping', component: ShoppingComponent},
-  {path: 'login',component: AuthComponent}
+  {path: 'login', component: AuthComponent}
 ];
 
 @NgModule({

@@ -2,7 +2,7 @@ import { Subject } from 'rxjs';
 
 import { Ingredientes} from '../../shared/ingredients.model';
 
-export class ingredientesServices{
+export class ingredientesService{
   ingredienteEditado = new Subject<Ingredientes[]>();
   ingredienteEdicion = new Subject<number>();
 private ingredientes: Ingredientes[] = [];
