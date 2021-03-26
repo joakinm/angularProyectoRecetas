@@ -5,6 +5,9 @@ import { catchError, tap } from 'rxjs/operators';
 import { throwError, BehaviorSubject } from 'rxjs';
 import { User } from './user.model';
 import { environment } from '../../environments/environment';
+import * as fromApp from '../store/app.reducer';
+import * as authActions from './store/auth.action'
+import { Store } from '@ngrx/store';
 
 export interface RespuestaAuth{
     idToken:string;
@@ -19,11 +22,14 @@ export interface RespuestaAuth{
 export class authService {
 
     user = new BehaviorSubject<User>(null);
-    constructor(private http: HttpClient, private router : Router){}
+    constructor(private http: HttpClient, 
+                private router: Router, 
+                private store: Store<fromApp.AppState>
+                ) {}
     tokenTimerExpiration : any;
 
     //-----------------------------REGISTRO-----------------------
-    registro(mail: string, pass: string){
+    registro(mail: string, pass: string) {
         return this.http.post<RespuestaAuth>("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=" + environment.firebaseKey
         ,{
             email: mail,
@@ -35,7 +41,7 @@ export class authService {
         }))
     }
     //--------------------------------LOGIN-----------------------
-    login(mail : string, pass: string){
+    login(mail : string, pass: string) {
         return this.http.post<RespuestaAuth>('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' + environment.firebaseKey,
         {
             email : mail,
@@ -46,8 +52,8 @@ export class authService {
         })
         )
     }
-    autoLogin(){
-        const userData:{
+    autoLogin() {
+        const userData: {
             mail: string;
             id: string;
             _token: string;
@@ -61,16 +67,27 @@ export class authService {
             )
             
         if (usuario.token){
-            this.user.next(usuario);
+            this.store.dispatch(new authActions.Login({
+                mail: usuario.mail, 
+                id: usuario.id, 
+                _token: usuario.token, 
+                _tokenExpirationDate: new Date(userData._tokenExpirationDate)
+            }));
             const duracionExpiracion = new Date(userData._tokenExpirationDate).getTime() - new Date().getTime();
             this.autologout(duracionExpiracion);
             
         }
     }
     //-------------------METHODS PRIVADOS PARA USUARIO Y ERRORES---------------
-    private handleUser(mail: string, userId : string, token: string, expiresIn : number){
+    private handleUser(mail: string, userId : string, token: string, expiresIn: number) {
         const expDate = new Date(new Date().getTime() + +expiresIn * 1000);
-        const user = new User(mail,userId,token,expDate);
+        const user = new User(mail, userId, token, expDate);
+        this.store.dispatch(new authActions.Login({
+            mail: mail, 
+            id: userId,
+            _token: token,
+            _tokenExpirationDate: new Date(expDate)
+            }));
         this.user.next(user); 
         this.autologout(expiresIn * 1000);
         localStorage.setItem('userData', JSON.stringify(user));
@@ -108,7 +125,7 @@ export class authService {
     }
 //---------------------------LOGOUT Y AUTOLOGOUT-------------------------
     logout(){
-        this.user.next(null);
+        this.store.dispatch(new authActions.Logout());
         this.router.navigate(['./login']);
         localStorage.removeItem('userData');
         if(this.tokenTimerExpiration){
