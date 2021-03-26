@@ -6,7 +6,7 @@ import { Ingredientes } from '../shared/ingredients.model';
 import{ingredientesService } from './shopping-edit/ingredientes.service';
 import * as fromShoppinglist from './store/shopping-list.reducer';
 import * as shoppingListActions from './store/shopping-list.action';
-
+import * as fromApp from 'src/app/store/app.reducer';
 
 @Component({
   selector: 'app-shopping',
@@ -19,7 +19,7 @@ export class ShoppingComponent implements OnInit {
   private subsIngServ: Subscription;
   
   constructor(private ingserv: ingredientesService, 
-              private store: Store<fromShoppinglist.AppState> 
+              private store: Store<fromApp.AppState> 
     ) {}
 
     
