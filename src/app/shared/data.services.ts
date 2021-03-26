@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { recipeServices } from '../recipes/recipes.service';
-import {ingredientesService} from '../shopping/shopping-edit/ingredientes.service';
 import { Recipe } from '../recipes/recipe.model';
 import {HttpClient} from '@angular/common/http';
 import { throwError, Subject, } from 'rxjs';
@@ -12,8 +11,8 @@ import { authService } from '../auth/auth.service';
 export class dataServices {
     rec: Recipe[];
     error = new Subject<string>();
-    constructor(private recServ:recipeServices , private ingServ : ingredientesService,
-                private http: HttpClient, private authServ : authService){}
+    constructor(private recServ:recipeServices,
+                private http: HttpClient,){}
                 
     guardarRecetas(){
         this.rec = this.recServ.getRecetas();
