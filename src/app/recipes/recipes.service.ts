@@ -21,7 +21,7 @@ constructor(private ingServ : ingredientesService,
         return this.recipes[id];
     }
     onAgregarIngCarrito(listaIng : Ingredientes[]){
-        this.store.dispatch(new shoppingListAction.addIngredients(listaIng));
+        this.store.dispatch(new shoppingListAction.AddIngredients(listaIng));
     }
     //-------------------AGREGAR-----------------------------------------
     agregarReceta(receta:Recipe){
