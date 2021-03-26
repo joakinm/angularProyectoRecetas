@@ -26,43 +26,47 @@ export function shoppingListReducer (
         case shoppingListActions.ADD_INGREDIENT:
             return {
                 ...state,
-                ingredientes: [...state.ingredients, action.payload]
+                ingredients: [...state.ingredients, action.payload]
             }
 
         case shoppingListActions.ADD_INGREDIENTS:
             return {
                 ...state,
-                ingredientes: [...state.ingredients, ...action.payload]
+                ingredients: [...state.ingredients, ...action.payload]
             }
 
         case shoppingListActions.UPDATE_INGREDIENTS:
-            const ingredient = state.ingredients[action.payload.index];
+            const ingredient = state.ingredients[state.editedIngredientIndex];
             const updatedIngredient = {
                 ...ingredient,
-                ...action.payload.ingrediente
+                ...action.payload
             };
 
             const updatedIngredients = [...state.ingredients];
-            updatedIngredients[action.payload.index] = updatedIngredient;
+            updatedIngredients[state.editedIngredientIndex] = updatedIngredient;
             return {
                 ...state,
-                ingredientes: updatedIngredients
+                ingredients: updatedIngredients,
+                editedIngredient: null,
+                editedIngredientIndex: -1
             }
 
         case shoppingListActions.DELETE_INGREDIENTS:
             return {
                 ...state,
-                ingredientes: state.ingredients.filter((ing, ingIndex) => {
-                    return ingIndex !== action.payload;
-                })
+                ingredients: state.ingredients.filter((ing, ingIndex) => {
+                    return ingIndex !== state.editedIngredientIndex;
+                }),
+                editedIngredient: null,
+                editedIngredientIndex: -1
             }
 
         case shoppingListActions.START_EDIT:
             return {
                 ...state,
                 editedIngredientIndex: action.payload,
-                editedIgredient: {... state.ingredients[action.payload]}
-            }
+                editedIngredient: {...state.ingredients[action.payload]}
+              }
 
         case shoppingListActions.STOP_EDIT:
             return {

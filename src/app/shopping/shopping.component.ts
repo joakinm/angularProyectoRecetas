@@ -15,8 +15,7 @@ import * as shoppingListActions from './store/shopping-list.action';
 })
 
 export class ShoppingComponent implements OnInit {
-  
-  ingredientes: Observable <{ ingredientes: Ingredientes[] }>;
+  ingredientes: Observable <fromShoppinglist.State>;
   private subsIngServ: Subscription;
   
   constructor(private ingserv: ingredientesService, 
@@ -25,14 +24,14 @@ export class ShoppingComponent implements OnInit {
 
     
   ngOnInit(): void {
-    // this.ingredientes = this.store.select('shoppingList');
+    this.ingredientes = this.store.select('shoppingList');
   }
 
   onAgregarIngrediente($event) {
   this.ingserv.onAgregarIngrediente($event);
   }
 
-  onEditarIngrediente(index:number) {
+  onEditarIngrediente(index: number) {
     this.store.dispatch(new shoppingListActions.StartEdit(index));
   }
 
