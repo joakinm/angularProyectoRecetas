@@ -6,6 +6,7 @@ import { Observable, Subscription } from 'rxjs';
 import { Ingredientes } from '../../shared/ingredients.model';
 import { ingredientesService } from './ingredientes.service';
 import * as shoppingListAction from '../store/shopping-list.action';
+import * as fromShoppinglist from '../store/shopping-list.reducer';
 
 @Component({
   selector: 'app-shopping-edit',
@@ -19,8 +20,8 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
   ing: Ingredientes;
   indexEdit:number;
   
-  constructor(private ingserv : ingredientesService, private store: Store<{shoppingList: { ingredientes: Ingredientes[]} }>) {}
-  @ViewChild("f") formulario:NgForm;
+  constructor(private ingserv : ingredientesService, private store: Store<fromShoppinglist.AppState>) {}
+  @ViewChild("f") formulario: NgForm;
   
   
   ngOnInit(): void {

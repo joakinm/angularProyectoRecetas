@@ -4,7 +4,7 @@ import { Subscription, Observable } from 'rxjs';
 
 import { Ingredientes } from '../shared/ingredients.model';
 import{ingredientesService } from './shopping-edit/ingredientes.service';
-import { shoppingListType } from './store/shopping-list.action';
+import * as fromShoppinglist from './store/shopping-list.reducer';
 
 @Component({
   selector: 'app-shopping',
@@ -18,7 +18,7 @@ export class ShoppingComponent implements OnInit {
   private subsIngServ: Subscription;
   
   constructor(private ingserv: ingredientesService, 
-              private store: Store<{shoppingList: {ingredientes: Ingredientes[]}}> 
+              private store: Store<fromShoppinglist.AppState> 
     ) {}
 
     

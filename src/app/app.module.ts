@@ -10,7 +10,7 @@ import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core.module';
 import { AuthModule } from './auth/auth.module';
 import { StoreModule } from '@ngrx/store';
-import { shoppingListReducer } from './shopping/store/shopping-list-reducer';
+import { shoppingListReducer } from './shopping/store/shopping-list.reducer';
 
 @NgModule({
   declarations: [
