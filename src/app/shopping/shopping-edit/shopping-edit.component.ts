@@ -7,6 +7,7 @@ import { Ingredientes } from '../../shared/ingredients.model';
 import { ingredientesService } from './ingredientes.service';
 import * as shoppingListAction from '../store/shopping-list.action';
 import * as fromShoppinglist from '../store/shopping-list.reducer';
+import { state } from '@angular/animations';
 
 @Component({
   selector: 'app-shopping-edit',
@@ -15,27 +16,42 @@ import * as fromShoppinglist from '../store/shopping-list.reducer';
 })
 export class ShoppingEditComponent implements OnInit, OnDestroy {
   ingredientes: Observable< {ingredientes: Ingredientes[]} >;
-  modoEdit = false;
+  editMode = false;
+  subs = new Subscription();
   
-  ing: Ingredientes;
-  indexEdit:number;
+  editedIngredient: Ingredientes;
+  indexEdit: number;
   
   constructor(private ingserv : ingredientesService, private store: Store<fromShoppinglist.AppState>) {}
-  @ViewChild("f") formulario: NgForm;
+  @ViewChild("f") form: NgForm;
   
   
   ngOnInit(): void {
-    this.ingredientes = this.store.select('shoppingList');
+    this.subs = this.store.select('shoppingList').subscribe(stateData => {
+      if (stateData.editedIngredientIndex > -1) {
+        this.editMode = true;
+        this.indexEdit = stateData.editedIngredientIndex;
+        this.editedIngredient = stateData.editedIngredient;
+        this.form.setValue({
+          name: this.editedIngredient.nombre,
+          value: this.editedIngredient.valor
+        })
+      } else {
+        this.editMode = false;
+      }
+    });
+    // this.ingredientes = this.store.select('shoppingList');
     this.store.select('shoppingList').subscribe();
   }
 
   ngOnDestroy() {
+    this.subs.unsubscribe();
   }
 
   onAgregarDatos(f: NgForm) {
     const value = f.value;
     const nuevoIng = new Ingredientes(value.nombre, value.valor);
-    if(this.modoEdit == true) {
+    if(this.editMode == true) {
       this.store.dispatch(
         new shoppingListAction.UpdateIngredients({
           index: this.indexEdit, 
@@ -47,14 +63,15 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
       this.store.dispatch(new shoppingListAction.AddIngredient(nuevoIng));
     }
   }
+
   eliminarIngrediente() {
     this.store.dispatch(new shoppingListAction.DeleteIngredientes(this.indexEdit));
-    this.formulario.reset();
+    this.form.reset();
   }
 
   limpiarInputs(f: NgForm) {
-  this.formulario.reset();
-  this.modoEdit = false;
+  this.form.reset();
+  this.editMode = false;
   this.store.dispatch(new shoppingListAction.StopEdit());
   }
 }

@@ -25,7 +25,7 @@ export class ShoppingComponent implements OnInit {
 
     
   ngOnInit(): void {
-    this.ingredientes = this.store.select('shoppingList');
+    // this.ingredientes = this.store.select('shoppingList');
   }
 
   onAgregarIngrediente($event) {

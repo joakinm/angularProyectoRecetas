@@ -3,18 +3,18 @@
         <form (ngSubmit)="onAgregarDatos(f)" #f="ngForm">
             <div class="row">
                 <div class="col-sm-5">
-                    <label for="nombre">Nombre</label>
-                    <input type="text" id="nombre" class="form-control" ngModel name="nombre" required #nom>
+                    <label for="name">Nombre</label>
+                    <input type="text" id="name" class="form-control" ngModel name="name" required #nom>
                     <span class="help-block" *ngIf="!nom.valid && nom.touched">Ingresar un nombre</span>
                 </div>
                 <div class="col-sm-2">
-                    <label for="valor"> Valor</label>
-                    <input type="number" id="valor" class="form-control" ngModel name="valor" required #val pattern="^[1-9]+[0-9]*$">
+                    <label for="value"> Valor</label>
+                    <input type="number" id="value" class="form-control" ngModel name="value" required #val pattern="^[1-9]+[0-9]*$">
                     <span class="help-block" *ngIf="!val.valid && val.touched">Ingresar un valor</span>
                 </div>
             </div>
-            <button class="btn btn-success" type="submit" [disabled]="!f.valid">{{modoEdit ? 'Actualizar' : 'Agregar'}}</button>
-            <button class="btn btn-danger" type="button" (click)="eliminarIngrediente()" [disabled]="!modoEdit">Eliminar</button>
+            <button class="btn btn-success" type="submit" [disabled]="!f.valid">{{editMode ? 'Actualizar' : 'Agregar'}}</button>
+            <button class="btn btn-danger" type="button" (click)="eliminarIngrediente()" [disabled]="!editMode">Eliminar</button>
             <button class="btn btn-primary" type="button" (click)="limpiarInputs(f)">Limpiar</button>
         </form>
     </div>
