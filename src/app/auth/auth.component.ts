@@ -8,7 +8,6 @@ import { AlertComponent } from '../shared/alert/alert.component';
 import { placeHolderDirective } from '../shared/placeholder/placeholder.directive';
 import * as fromApp from '../store/app.reducer';
 import * as authActions from './store/auth.actions';
-
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
@@ -67,7 +66,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   }
 
   onHandleError() {
-    this.error = null;
+    this.store.dispatch(new authActions.ClearError());
   }
   
   private showErrorAlert(message:string) {

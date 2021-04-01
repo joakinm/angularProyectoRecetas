@@ -20,6 +20,10 @@ export interface RespuestaAuth{
 
 export class AuthEffects {
     @Effect()
+    authSingup = this.actions$.pipe(
+        ofType(authActions.SINGUP_START)
+    )
+    @Effect()
     authLogin = this.actions$.pipe(
         ofType(authActions.LOGIN_START), 
         switchMap((authData: authActions.LoginStart) => {
