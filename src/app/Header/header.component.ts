@@ -1,10 +1,12 @@
 import { Component, OnInit, OnDestroy} from '@angular/core';
-import { dataServices } from '../shared/data.services';
-import {Subscription } from 'rxjs';
-import { authService } from '../auth/auth.service';
 import { Store } from '@ngrx/store';
-import * as fromApp from '../store/app.reducer';
+import {Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { dataServices } from '../shared/data.services';
+import { authService } from '../auth/auth.service';
+import * as fromApp from '../store/app.reducer';
+import * as AuthActions from '../auth/store/auth.actions';
+
 
 @Component({
     selector: 'app-header',
@@ -37,6 +39,6 @@ export class headerComponent implements OnInit, OnDestroy{
         this.data.traerRecetas().subscribe();
     }
     onLogout(){
-        this.authServ.logout();
+        this.store.dispatch(new AuthActions.Logout());
     }
 }
