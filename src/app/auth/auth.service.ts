@@ -6,7 +6,7 @@ import { throwError, BehaviorSubject } from 'rxjs';
 import { User } from './user.model';
 import { environment } from '../../environments/environment';
 import * as fromApp from '../store/app.reducer';
-import * as authActions from './store/auth.action'
+import * as authActions from './store/auth.actions'
 import { Store } from '@ngrx/store';
 
 export interface RespuestaAuth{

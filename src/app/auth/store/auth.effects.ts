@@ -38,8 +38,32 @@ export class AuthEffects {
                 _token: resData.idToken ,
                 _tokenExpirationDate: expDate
             });
-        }), catchError(error => {
-            return of();
+        }), catchError(errorRes => {
+            let errorMsg = 'Ocurrio un error desconocido';
+        if(!errorRes.error || !errorRes.error.error) { 
+            return of(new authActions.LoginFail(errorMsg)) 
+        }
+        switch(errorRes.error.error.message) {
+            case 'EMAIL_EXISTS':
+                errorMsg = 'El mail ingresado ya existe.';
+                break;
+            case 'OPERATION_NOT_ALLOWED': 
+                errorMsg = 'El usuario no tiene los permisos suficientes.';
+                break;
+            case 'TOO_MANY_ATTEMPTS_TRY_LATER':
+                errorMsg = 'Actividad inusual en la cuenta, intentalo despues.';
+                break;
+            case 'INVALID_PASSWORD':
+                errorMsg = 'La contraseña es invalida.';
+                break;
+            case 'USER_DISABLED':
+                errorMsg = 'El usuario fue desactivado por un administrador.';
+                break;
+                case 'EMAIL_NOT_FOUND':
+                errorMsg = 'El mail no existe.';
+                break;
+        }
+            return of(new authActions.LoginFail(errorMsg));
             })
         )
         })
