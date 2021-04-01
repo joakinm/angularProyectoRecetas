@@ -52,7 +52,7 @@ export class AuthComponent implements OnInit, OnDestroy {
       this.store.dispatch(new authActions.LoginStart({email: mail, password: pass}));
       // auth = this.authserv.login(mail,pass)
     } else {
-      auth = this.authserv.registro(mail,pass)
+      this.store.dispatch(new authActions.SingupStart({email: mail, password: pass}));
     }
     // auth.subscribe(resData => {
     //   this.isLogin = false;

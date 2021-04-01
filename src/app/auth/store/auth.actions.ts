@@ -6,13 +6,14 @@ export const LOGIN_START = '[Auth] LoginStart';
 export const LOGIN_FAIL = '[Auth] LoginFail';
 export const SINGUP_START = '[Auth] SingupStart'
 export const CLEAR_ERROR = '[Auth] CleanError';
+export const AUTO_LOGIN = '[Auth] AutoLogin';
 export const LOGOUT = '[Auth] Logout';
 
 export class Login implements Action {
     readonly type = LOGIN;
     constructor (public payload: {
-        mail: string,
-        id: string,
+        email: string,
+        userId: string,
         _token: string,
         _tokenExpirationDate: Date
         }
@@ -25,6 +26,10 @@ export class Logout implements Action {
 export class LoginStart implements Action {
     readonly type = LOGIN_START;
     constructor(public payload: {email: string, password: string}) {}
+}
+
+export class AutoLogin implements Action {
+    readonly type = AUTO_LOGIN;
 }
 
 export class SingupStart implements Action {
@@ -47,4 +52,5 @@ export type authType =
 | LoginStart 
 | LoginFail
 | SingupStart
-| ClearError;
+| ClearError
+| AutoLogin;
