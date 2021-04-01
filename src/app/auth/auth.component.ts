@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ComponentFactoryResolver, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { authService, RespuestaAuth } from './auth.service';
+import { authService } from './auth.service';
 import { Observable, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { AlertComponent } from '../shared/alert/alert.component';
@@ -46,7 +46,6 @@ export class AuthComponent implements OnInit, OnDestroy {
     if (!form.valid) {
       return
     }
-    let auth : Observable<RespuestaAuth>
     this.isLogin = true;
     if(this.modoLogin) {
       this.store.dispatch(new authActions.LoginStart({email: mail, password: pass}));
