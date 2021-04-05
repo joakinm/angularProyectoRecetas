@@ -15,7 +15,8 @@ export class Login implements Action {
         email: string,
         userId: string,
         _token: string,
-        _tokenExpirationDate: Date
+        _tokenExpirationDate: Date,
+        redirect: boolean
         }
     ) {}
 }

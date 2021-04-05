@@ -6,6 +6,7 @@ import { dataServices } from '../shared/data.services';
 import { authService } from '../auth/auth.service';
 import * as fromApp from '../store/app.reducer';
 import * as AuthActions from '../auth/store/auth.actions';
+import * as RecipeActions from '../recipes/store/recipe.actions';
 
 
 @Component({
@@ -35,7 +36,8 @@ export class headerComponent implements OnInit, OnDestroy{
         this.data.guardarRecetas();
     }
 
-    onGetDatos(){
+    onFetchData() {
+        this.store.dispatch(new RecipeActions.FetchRecipes());
         this.data.traerRecetas().subscribe();
     }
     onLogout(){

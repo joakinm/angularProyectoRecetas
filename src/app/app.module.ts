@@ -13,6 +13,7 @@ import { CoreModule } from './core.module';
 import { AuthModule } from './auth/auth.module';
 import { appReducer } from './store/app.reducer';
 import { AuthEffects } from './auth/store/auth.effects';
+import { RecipeEffects } from './recipes/store/recipe.effects';
 import { environment } from 'src/environments/environment';
 
 
@@ -30,7 +31,7 @@ import { environment } from 'src/environments/environment';
     CoreModule, 
     AuthModule,
     StoreModule.forRoot(appReducer),
-    EffectsModule.forRoot([AuthEffects]),
+    EffectsModule.forRoot([AuthEffects, RecipeEffects]),
     StoreDevtoolsModule.instrument({logOnly: environment.production })
   ],
   bootstrap: [AppComponent]
