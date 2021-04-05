@@ -1,18 +1,23 @@
 import { Injectable } from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import { Store } from '@ngrx/store';
 import { recipeServices } from '../recipes/recipes.service';
 import { Recipe } from '../recipes/recipe.model';
-import {HttpClient} from '@angular/common/http';
 import { throwError, Subject, } from 'rxjs';
-import { map, tap, catchError, take, exhaustMap } from 'rxjs/operators';
-import { authService } from '../auth/auth.service';
+import { map, tap, catchError } from 'rxjs/operators';
+import * as fromApp from 'src/app/store/app.reducer';
+import * as RecipesActions from 'src/app/recipes/store/recipe.actions';
+
 
 @Injectable ({providedIn: 'root'})
 
 export class dataServices {
     rec: Recipe[];
     error = new Subject<string>();
-    constructor(private recServ:recipeServices,
-                private http: HttpClient,){}
+    constructor(
+        private recServ: recipeServices,
+        private http: HttpClient, 
+        private store: Store< fromApp.AppState > ) {}
                 
     guardarRecetas(){
         this.rec = this.recServ.getRecetas();
@@ -25,15 +30,16 @@ export class dataServices {
         );
     }
 
-    traerRecetas(){
-        return  this.http.get<Recipe[]>('https://recetasproyecto-104e7.firebaseio.com/recipes.json')
+    traerRecetas() {
+        return this.http.get<Recipe[]>('https://recetasproyecto-104e7.firebaseio.com/recipes.json')
         .pipe(map(recipes =>{
             return recipes.map( recipe =>{
                 return{...recipe, ingredientes: recipe.ingredientes ? recipe.ingredientes: []};
             });
         }),
-        tap(recetas =>{
-            this.recServ.agregarRecetas(recetas);
+        tap(recipes => {
+            // this.recServ.agregarRecetas(recipes);
+            this.store.dispatch(new RecipesActions.SetRecipes(recipes));
         })
         );
     }
