@@ -2,7 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import { recipeServices } from '../recipes.service';
-
+import * as fromApp from '../../store/app.reducer';
+import { Store } from '@ngrx/store';
+import { pipe } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-recipe-edit',
@@ -15,7 +18,11 @@ export class RecipeEditComponent implements OnInit {
   foto: string;
 
   form: FormGroup;
-  constructor(private rutaActivada : ActivatedRoute, private router: Router, private recetaServicio: recipeServices) { }
+  constructor(
+    private rutaActivada: ActivatedRoute,
+    private router: Router, 
+    private recetaServicio: recipeServices,
+    private store: Store<fromApp.AppState>) { }
   
   id : number;
   editMode: boolean;
@@ -36,21 +43,26 @@ export class RecipeEditComponent implements OnInit {
     let recetaDesc = '';
     let recetaingredientes = new FormArray([]);
 
-    if(this.editMode){
-      const receta = this.recetaServicio.getRecetaID(this.id);
-      recetaNombre = receta.nombre;
-      recetaImg = receta.imagen;
-      recetaDesc = receta.descripcion;
-      if (receta.ingredientes){
-        for( let ingrediente of receta.ingredientes){
-          recetaingredientes.push(
-            new FormGroup({            
-            'nombre' : new FormControl(ingrediente.nombre, Validators.required),
-            'valor' : new FormControl(ingrediente.valor, [Validators.required,Validators.pattern(/^[1-9]+[0-9]*$/)])
-            })
-          );
+    if (this.editMode) {
+      this.store.select('recipes').pipe(map( recipeState => {
+        return recipeState.recipes.find((rec,index) => {
+          return index === this.id;
+        })
+      })).subscribe(recipe => {
+        recetaNombre = recipe.nombre;
+        recetaImg = recipe.imagen;
+        recetaDesc = recipe.descripcion;
+        if (recipe.ingredientes) {
+          for( let ingrediente of recipe.ingredientes){
+            recetaingredientes.push(
+              new FormGroup({            
+              'nombre' : new FormControl(ingrediente.nombre, Validators.required),
+              'valor' : new FormControl(ingrediente.valor, [Validators.required,Validators.pattern(/^[1-9]+[0-9]*$/)])
+              })
+            );
+          }
         }
-      }
+      })
     }
 
     this.form = new FormGroup({
