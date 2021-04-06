@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { Recipe } from './recipe.model';
-import * as fromApp from '../store/app.reducer';
 import { Store } from '@ngrx/store';
-import * as RecipesActions from './store/recipe.actions';
 import { Actions, ofType } from '@ngrx/effects';
 import { map, switchMap, take } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { Recipe } from './recipe.model';
+import * as RecipesActions from './store/recipe.actions';
+import * as fromApp from '../store/app.reducer';
 
 @Injectable({providedIn:'root'})
 export class recipeResolverService implements Resolve<Recipe[]>{
