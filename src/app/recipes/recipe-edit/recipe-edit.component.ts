@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import { recipeServices } from '../recipes.service';
 import * as fromApp from '../../store/app.reducer';
+import * as recipesActions from '../store/recipe.actions';
 import { Store } from '@ngrx/store';
-import { pipe } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Component({
@@ -12,10 +13,11 @@ import { map } from 'rxjs/operators';
   templateUrl: './recipe-edit.component.html',
   styleUrls: ['./recipe-edit.component.scss']
 })
-export class RecipeEditComponent implements OnInit {
+export class RecipeEditComponent implements OnInit, OnDestroy {
   titulo: string;
   descripcion: string;
   foto: string;
+  storeSubs = new Subscription();
 
   form: FormGroup;
   constructor(
@@ -37,14 +39,20 @@ export class RecipeEditComponent implements OnInit {
     );
   }
 
-  private initForm(){
+  ngOnDestroy() {
+    if (this.storeSubs) {
+      this.storeSubs.unsubscribe();
+    }
+  }
+
+  private initForm() {
     let recetaNombre = '';
     let recetaImg = '';
     let recetaDesc = '';
     let recetaingredientes = new FormArray([]);
 
     if (this.editMode) {
-      this.store.select('recipes').pipe(map( recipeState => {
+      this.storeSubs = this.store.select('recipes').pipe(map( recipeState => {
         return recipeState.recipes.find((rec,index) => {
           return index === this.id;
         })
@@ -78,7 +86,7 @@ export class RecipeEditComponent implements OnInit {
     return (<FormArray>this.form.get('ingredientes')).controls;
   }
 
-  onagregarIngrediente(){
+  onagregarIngrediente() {
     (<FormArray>this.form.get('ingredientes')).push(
       new FormGroup({
         'nombre' : new FormControl(null, Validators.required),
@@ -86,19 +94,24 @@ export class RecipeEditComponent implements OnInit {
     }))
   }
 
-  onSubmit(){
-    if (this.editMode)
-    {this.recetaServicio.editarReceta(this.form.value,this.id);}
-    else
-    {this.recetaServicio.agregarReceta(this.form.value);}
+  onSubmit() {
+    if (this.editMode) {
+      this.store.dispatch(new recipesActions.UpdateRecipe({
+        newRecipe: this.form.value, 
+        index: this.id
+      }));
+    } else {
+      this.store.dispatch(new recipesActions.AddRecipe(this.form.value));
+    }
     this.cerrarForm();
+  
   }
 
-  cerrarForm(){
+  cerrarForm() {
     this.router.navigate(['../'], {relativeTo: this.rutaActivada});
   }
 
-  borrarIng(i : number){
+  borrarIng(i: number ) {
     (<FormArray>this.form.get('ingredientes')).removeAt(i);
   }
 }
