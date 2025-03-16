@@ -13,7 +13,7 @@ const initialState: State = {
     loading: false
 }
 
-export function AuthReducer(
+export function AuthReducer (
     state: State = initialState, 
     action: AuthActions.authType) {
 
